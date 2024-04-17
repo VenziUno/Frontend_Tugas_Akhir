@@ -35,7 +35,7 @@ export default function Dashboard() {
     isLoading: isLoadingBorrowing,
     isError: isErrorBorrowing,
   } = useFetcher("borrowing/report");
-
+  const { res: resMember } = useFetcher("member");
   const {
     res: resBook,
     isLoading: isLoadingBook,
@@ -49,11 +49,21 @@ export default function Dashboard() {
   const [countDikembalikan, setCountDikembalikan] = useState(0);
   const [totalMulct, setTotalMulct] = useState(0);
   const [totalLoanStock, setTotalLoanStock] = useState(null);
+  const [totalTitles, setTotalTitles] = useState(null);
+  const [totalMembers, setTotalMembers] = useState(null);
+  const [totalStock, setTotalStock] = useState(null);
   const [totalAvailableStock, setTotalAvailableStock] = useState(null);
   const [totalMissingStock, setTotalMissingStock] = useState(null);
   const [totalRepairStock, setTotalRepairStock] = useState(null);
 
   useEffect(() => {
+    if (resMember) {
+      const data = resBook.data.map((gedung) => {
+        
+      });
+      setTotalMembers(data.length);
+    }
+
     if (resBook) {
       const data = resBook.data.map((gedung) => {
         const arr = Object.entries(gedung);
@@ -109,6 +119,16 @@ export default function Dashboard() {
         return newData;
       });
 
+      const totalStock = data.reduce(
+        (accumulator, currentValue) =>
+          accumulator +
+          parseInt(currentValue.available_stock.split(" ")[0]) +
+          parseInt(currentValue.loan_stock.split(" ")[0]) +
+          parseInt(currentValue.missing_stock.split(" ")[0]) +
+          parseInt(currentValue.repair_stock.split(" ")[0]),
+        0
+      );
+
       const totalAvailableStock = data.reduce(
         (accumulator, currentValue) =>
           accumulator + parseInt(currentValue.available_stock.split(" ")[0]),
@@ -132,26 +152,20 @@ export default function Dashboard() {
           accumulator + parseInt(currentValue.repair_stock.split(" ")[0]),
         0
       );
-
+      setTotalTitles(data.length);
+      setTotalStock(totalStock);
       setTotalLoanStock(totalLoanStock);
       setTotalAvailableStock(totalAvailableStock);
       setTotalMissingStock(totalMissingStock);
       setTotalRepairStock(totalRepairStock);
-
-      // setDataTableGedung(data);
-      // setDataPagination(res.data);
-      // if (search && move) {
-      //   setMove(false);
-      //   location.push(`${route}?page=1`);
-      // }
     }
   }, [resBook]);
 
-  useEffect(()=>{
-    if(resBorrowing){
-      setDataTable(resBorrowing.data)
+  useEffect(() => {
+    if (resBorrowing) {
+      setDataTable(resBorrowing.data);
     }
-  })
+  });
 
   useEffect(() => {
     if (res && res.data) {
@@ -230,8 +244,8 @@ export default function Dashboard() {
           "rgba(255, 0, 0, 0.8)",
           "rgba(0, 0, 255, 0.8)",
         ],
-        borderWidth:2,
-        spacing:10,
+        borderWidth: 2,
+        spacing: 10,
       },
     ],
   };
@@ -245,13 +259,13 @@ export default function Dashboard() {
       },
       elements: {
         arc: {
-            spacing: 20 // Atur jarak antara setiap bagian data (slice)
-        }
-    }
+          spacing: 20, // Atur jarak antara setiap bagian data (slice)
+        },
+      },
     },
     hover: {
-      mode: null // Menghilangkan efek hover
-  }
+      mode: null, // Menghilangkan efek hover
+    },
   };
 
   const datas = {
@@ -306,6 +320,45 @@ export default function Dashboard() {
     <div>
       <Layout>
         <div className="space-y-4">
+          <section className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="flex items-center p-6 bg-white shadow rounded-lg">
+              <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-yellow-600 bg-yellow-100 rounded-full mr-6">
+                <div className="h-6 w-6"></div>
+              </div>
+              <div>
+                <span className="block text-2xl font-bold">
+                  {totalTitles} Title
+                </span>
+                <span className="block text-gray-500">
+                  Number of Book Titles
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center p-6 bg-white shadow rounded-lg">
+              <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-pink-600 bg-pink-100 rounded-full mr-6">
+                <div className="h-6 w-6"></div>
+              </div>
+              <div>
+                <span className="block text-2xl font-bold">
+                  {totalStock} Book
+                </span>
+                <span className="block text-gray-500">
+                  Number of Book Stocks
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center p-6 bg-white shadow rounded-lg">
+              <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-gray-600 bg-gray-200 rounded-full mr-6">
+                <div className="h-6 w-6"></div>
+              </div>
+              <div>
+                <span className="block text-2xl font-bold">
+                  {totalMembers} Member
+                </span>
+                <span className="block text-gray-500">Number of Members</span>
+              </div>
+            </div>
+          </section>
           <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
             <div className="flex items-center p-6 bg-white shadow rounded-lg">
               <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-purple-600 bg-purple-100 rounded-full mr-6">
@@ -384,6 +437,7 @@ export default function Dashboard() {
                             height={500}
                             className="object-contain"
                           />
+                          {console.log(book)}
                         </div>
                         <span className="text-gray-600">{book.name}</span>
                         <span className="ml-auto font-semibold">

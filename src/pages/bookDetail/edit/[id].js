@@ -539,7 +539,7 @@ const EditBook = ({ id }) => {
           </Label>
           <Label label="Call Number">
             <InputFields
-              type="number"
+              type="text"
               style="w-full"
               placeholder="Call Number"
               title="Call Number"

@@ -9,7 +9,21 @@ import React, { useEffect, useState } from "react";
 
 export default function FilterKatalogBook() {
   const [label, setLabel] = useState([]);
-  const [collectionType, setCollectionType] = useState([]);
+  const [subject, setSubject] = useState([]);
+  const [callNumber, setCallNumber] = useState([
+    { value: "0", name: "Computer Science, Information & General Works" },
+    { value: "1", name: "Philosophy & Psychology" },
+    { value: "2", name: "Religion" },
+    { value: "3", name: "Social Sciences" },
+    { value: "4", name: "Language" },
+    { value: "5", name: "Pure Science" },
+    { value: "6", name: "Applied Sciences" },
+    { value: "7", name: "Art & Recreation" },
+    { value: "8", name: "Literature" },
+    { value: "9", name: "History & Geography" },
+  ]);
+  const [subjectSearch, setSubjectSearch] = useState([]);
+  const [callNumberSearch, setCallNumberSearch] = useState([]);
   const [gmd, setGMD] = useState([]);
   const [gmdSearch, setGMDSearch] = useState([]);
   const [docLanguage, setDocLanguage] = useState([]);
@@ -18,19 +32,31 @@ export default function FilterKatalogBook() {
 
   const location = useRouter();
 
+  useEffect(() => {
+    if (location.query.callnumber) {
+      const grade_id = location.query.callnumber;
+      setCallNumberSearch({ grade_id });
+    }
+    if (location.query.subject) {
+      const grade_id = location.query.subject;
+      setSubjectSearch({ grade_id });
+    }
+  }, [location.query.callnumber,location.query.subject]); // Specify the dependency here
+
+  
   const {
     res: resLabel,
     isLoading: isLoadingLabel,
     isError: isErrorLabel,
   } = useFetcher(`public/label`);
   const { res, isLoading, isError } = useFetcher(
-    `public/book?doclanguage=${language.grade_id}&callnumber=${location.query.callnumber}&subject=${location.query.subject}&gmdSearch=${gmdSearch.grade_id}&label=${labelSearch.grade_id}`
+    `public/book?doclanguage=${language.grade_id}&callnumber=${callNumberSearch.grade_id}&subject=${subjectSearch.grade_id}&gmdSearch=${gmdSearch.grade_id}&label=${labelSearch.grade_id}`
   );
   const {
-    res: resCollectionType,
-    isLoading: isLoadingCollectionType,
-    isError: isErrorCollectionType,
-  } = useFetcher(`public/collectiontype`);
+    res: resSubject,
+    isLoading: isLoadingSubject,
+    isError: isErrorSubject,
+  } = useFetcher(`public/subject`);
   const {
     res: resGMD,
     isLoading: isLoadingGMD,
@@ -49,11 +75,11 @@ export default function FilterKatalogBook() {
       });
       setLabel(pilihan_label);
     }
-    if (resCollectionType) {
-      const pilihan_collection_type = resCollectionType.data.map((d) => {
+    if (resSubject) {
+      const pilihan_subject = resSubject.data.map((d) => {
         return { name: d.name, value: d.id };
       });
-      setCollectionType(pilihan_collection_type);
+      setSubject(pilihan_subject);
     }
     if (resGMD) {
       const pilihan_GMD = resGMD.data.map((d) => {
@@ -67,7 +93,7 @@ export default function FilterKatalogBook() {
       });
       setDocLanguage(pilihan_doc_language);
     }
-  }, [resLabel, resGMD, resDocLanguage, resCollectionType]);
+  }, [resLabel, resGMD, resDocLanguage, resSubject]);
 
   const [dataTableGedung, setDataTableGedung] = useState(null);
 
@@ -119,19 +145,32 @@ export default function FilterKatalogBook() {
                 }}
               />
             </div>
-            {/* <div className="border-b pb-4">
+            <div className="border-b pb-4">
               <MultiSelect
                 search
-                label={"Collection Type"}
-                list={collectionType}
+                label={"Call Number"}
+                list={callNumber}
                 type={"filter"}
                 size="w-full"
                 handleValue={(select) => {
                   const grade_id = select.map((d) => d.value);
-                  setCollection({ ...collection, grade_id });
+                  setCallNumberSearch({ ...callNumberSearch, grade_id });
                 }}
               />
-            </div> */}
+            </div>
+            <div className="border-b pb-4">
+              <MultiSelect
+                search
+                label={"Subject"}
+                list={subject}
+                type={"filter"}
+                size="w-full"
+                handleValue={(select) => {
+                  const grade_id = select.map((d) => d.value);
+                  setSubjectSearch({ ...callNumberSearch, grade_id });
+                }}
+              />
+            </div>
             <div className="border-b pb-4">
               <MultiSelect
                 search

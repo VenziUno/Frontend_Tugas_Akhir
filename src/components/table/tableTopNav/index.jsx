@@ -79,7 +79,7 @@ const TableTopNav = ({
             </React.Fragment>
           )}
           {buttonAdd && <Button link={path + "/add"}>Create</Button>}
-          {buttonBack && <Button action="light" link={"/book/bookDetail"}>back</Button>}
+          {buttonBack && <Button action="light" link={"/bookDetail"}>back</Button>}
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@ export default function BookDetail({ page }) {
             key !== "places_id" &&
             key !== "collation" &&
             key !== "series_title" &&
-            key !== "call_number" &&
+            // key !== "call_number" &&
             key !== "subjects_id" &&
             key !== "doc_languages_id" &&
             key !== "opac" &&
@@ -49,7 +49,9 @@ export default function BookDetail({ page }) {
             key !== "desc" &&
             typeof value !== "object"
         );
+        console.log(gedung)
         const newObj = Object.fromEntries(filterArr);
+        newObj.author_name = gedung.author.name;
         const itemCount = gedung.book_detail_status.filter(
           (item) => item.item_status.id === "IS001"
         ).length;
