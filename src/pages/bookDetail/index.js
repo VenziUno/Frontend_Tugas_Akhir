@@ -49,7 +49,6 @@ export default function BookDetail({ page }) {
             key !== "desc" &&
             typeof value !== "object"
         );
-        console.log(gedung)
         const newObj = Object.fromEntries(filterArr);
         newObj.author_name = gedung.author.name;
         const itemCount = gedung.book_detail_status.filter(

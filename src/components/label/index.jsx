@@ -1,6 +1,6 @@
 import React from "react";
 
-const Label = ({ children, label, type, typeStyle , style}) => {
+const Label = ({ children, label, type, typeStyle, childrenStyle , style}) => {
 
   switch (type){
     case "title":
@@ -12,9 +12,9 @@ const Label = ({ children, label, type, typeStyle , style}) => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col ${typeStyle}`}>
       <div className={`font-bold ${typeStyle} ${style}`}>{label}</div>
-      <div>{children}</div>
+      <div className={`${childrenStyle}`}>{children}</div>
     </div>
   );
 };

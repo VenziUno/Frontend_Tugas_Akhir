@@ -30,7 +30,6 @@ export default function BookDetail({ page }) {
             typeof value !== "object"
         );
         const newObj = Object.fromEntries(filterArr);
-        console.log(gedung)
         newObj.book_name = gedung.book.title;
         newObj.author_name = gedung.book.author.name;
         newObj.call_number = gedung.book.call_number;

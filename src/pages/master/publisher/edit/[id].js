@@ -105,7 +105,7 @@ const EditPublisher = ({ id }) => {
         <div className="flex flex-row justify-end gap-5">
           <Button
             action="light"
-            link="/settings/publisher"
+            link="/master/publisher"
             handleClick={resetForm}
           >
             Back

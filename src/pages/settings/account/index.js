@@ -43,7 +43,6 @@ export default function Admin({ page }) {
    
   }, [res]);
 
-  console.log(res)
 
   return (
     <Layout>

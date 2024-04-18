@@ -48,8 +48,6 @@ const EditStatus = ({ ids }) => {
     }
   };
 
-  console.log(router)
-
   const handleSubmitEdit = async () => {
     if (handleCheck()) {
       try {

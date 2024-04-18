@@ -32,6 +32,8 @@ const TableBody = ({
   indexStartFrom,
 }) => {
   const location = useRouter();
+  const { asPath } = location;
+
   const { user, basic } = useAppContext();
   const { setDeleteItem, setMulct } = user;
   const componentRef = useRef();
@@ -380,7 +382,6 @@ const TableBody = ({
                   <Button
                     action="danger"
                     handleClick={() => handleDelete(item)}
-                    link={path}
                   >
                     <AiOutlineDelete />
                   </Button>

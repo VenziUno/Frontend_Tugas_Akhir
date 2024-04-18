@@ -129,7 +129,6 @@ export default function AddMember() {
           type: "Success",
           message: res.data.message,
         });
-        console.log(form)
         router.push("/member");
       } catch (error) {
         resetForm();

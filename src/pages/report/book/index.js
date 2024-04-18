@@ -116,7 +116,6 @@ export default function ReportBook({ page }) {
     }
   }, [res]);
 
-  console.log(dataTableGedung)
 
   const handleDownload = () => {
     const rows = dataTableGedung.map((item, index) => ({

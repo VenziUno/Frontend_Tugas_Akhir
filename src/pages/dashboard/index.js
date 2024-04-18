@@ -437,7 +437,6 @@ export default function Dashboard() {
                             height={500}
                             className="object-contain"
                           />
-                          {console.log(book)}
                         </div>
                         <span className="text-gray-600">{book.name}</span>
                         <span className="ml-auto font-semibold">

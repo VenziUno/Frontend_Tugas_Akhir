@@ -46,7 +46,6 @@ export default function Login() {
         sessionStorage.setItem("token", res.data.authorisation.token);
         sessionStorage.setItem("role", res.data.user.role_id);
         sessionStorage.setItem("name", res.data.user.name);
-        console.log(res);
         if (res.data.user.role_id !== "RU003") {
           router.push("/dashboard");
         } else {

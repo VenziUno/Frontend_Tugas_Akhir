@@ -21,6 +21,7 @@ export default function AddBookDetail() {
     setNotification,
     handleShowNotification,
   } = basic;
+
   const [selectAuthor, setSelectAuthor] = useState([]);
   const [selectGmd, setSelectGmd] = useState([]);
   const [selectContent, setSelectContent] = useState([]);
@@ -31,8 +32,202 @@ export default function AddBookDetail() {
   const [selectSubject, setSelectSubject] = useState([]);
   const [selectDocLanguage, setSelectDocLanguage] = useState([]);
   const [selectLabel, setSelectLabel] = useState([]);
+  const [createAuthor, setCreateAuthor] = useState(false);
+  const [createPlace, setCreatePlace] = useState(false);
+  const [createPublisher, setCreatePublisher] = useState(false);
+  const [formPlace, setFormPlace] = useState({ id: "", name: "" });
+  const [formAuthor, setFormAuthor] = useState({ id: "", name: "", type: "" });
+  const [formPublisher, setFormPublisher] = useState({ id: "", name: "" });
 
+  const handleCreateAuthor = () => {
+    setCreateAuthor(!createAuthor);
+  };
+  const handleCreatePlace = () => {
+    setCreatePlace(!createPlace);
+  };
+  const handleCreatePublisher = () => {
+    setCreatePublisher(!createPublisher);
+  };
   const router = useRouter();
+  const pilihan_type = [
+    { label: "Personal Name", value: "P" },
+    { label: "Organizational Body", value: "O" },
+    { label: "Conference", value: "C" },
+  ];
+
+  const {
+    res: resCodePlace,
+    isLoading: isLoadingCodePlace,
+    isError: isErrorCodePlace,
+  } = useFetcher(`place/code`);
+
+  useEffect(() => {
+    if (resCodePlace) {
+      const { code, status } = resCodePlace;
+      if (status) {
+        setFormPlace({ ...formPlace, id: code });
+      }
+    }
+  }, [resCodePlace, setForm]);
+
+  const {
+    res: resCodeAuthor,
+    isLoading: isLoadingCodeAuthor,
+    isError: isErrorCodeAuthor,
+  } = useFetcher(`author/code`);
+
+  useEffect(() => {
+    if (resCodeAuthor) {
+      const { code, status } = resCodeAuthor;
+      if (status) {
+        setFormAuthor({ ...formAuthor, id: code });
+      }
+    }
+  }, [resCodeAuthor, setForm]);
+
+  const {
+    res: resCodePublisher,
+    isLoading: isLoadingCodePublisher,
+    isError: isErrorCodePublisher,
+  } = useFetcher(`publisher/code`);
+
+  useEffect(() => {
+    if (resCodePublisher) {
+      const { code, status } = resCodePublisher;
+      if (status) {
+        setFormPublisher({ ...formPublisher, id: code });
+      }
+    }
+  }, [resCodePublisher, setForm]);
+
+  const handleSubmitAddPlace = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const res = await axios.post(
+        `${
+          typeof window === "undefined"
+            ? process.env.API_URL_SSR
+            : process.env.API_URL
+        }/api/place`,
+        formPlace,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCreatePlace(!createPlace);
+      handleRefreshClickPlace();
+      setFormPlace({
+        id: "",
+        name: "",
+      });
+      setNotification({
+        show: true,
+        type: "Success",
+        message: res.data.message,
+      });
+    } catch (error) {
+      setCreatePlace(!createPlace);
+      setFormPlace({
+        id: "",
+        name: "",
+      });
+      setNotification({
+        show: true,
+        type: "Danger",
+        message: error.message,
+      });
+    }
+  };
+
+  const handleSubmitAddPublsiher = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const res = await axios.post(
+        `${
+          typeof window === "undefined"
+            ? process.env.API_URL_SSR
+            : process.env.API_URL
+        }/api/publisher`,
+        formPublisher,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCreatePublisher(!createPublisher);
+      handleRefreshClickPublisher();
+      setFormPublisher({
+        id: "",
+        name: "",
+      });
+      setNotification({
+        show: true,
+        type: "Success",
+        message: res.data.message,
+      });
+    } catch (error) {
+      setCreatePublisher(!createPublisher);
+      setFormPublisher({
+        id: "",
+        name: "",
+      });
+      setNotification({
+        show: true,
+        type: "Danger",
+        message: error.message,
+      });
+    }
+  };
+
+  const handleSubmitAddAuthor = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const res = await axios.post(
+        `${
+          typeof window === "undefined"
+            ? process.env.API_URL_SSR
+            : process.env.API_URL
+        }/api/author`,
+        formAuthor,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCreateAuthor(!createAuthor);
+      handleRefreshClickAuthor();
+      setFormAuthor({
+        id: "",
+        name: "",
+        type: "",
+      });
+      setNotification({
+        show: true,
+        type: "Success",
+        message: res.data.message,
+      });
+    } catch (error) {
+      setFormAuthor({
+        id: "",
+        name: "",
+        type: "",
+      });
+      setCreateAuthor(!createAuthor);
+      setNotification({
+        show: true,
+        type: "Danger",
+        message: error.message,
+      });
+    }
+  };
+
   const { res } = useFetcher("author");
 
   useEffect(() => {
@@ -44,6 +239,34 @@ export default function AddBookDetail() {
       setSelectAuthor(data);
     }
   }, [res]);
+
+  const fetchDataAndUpdateAuthor = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.get("https://wezady.my.id/api/author", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const responseData = response.data.data;
+      const data = responseData.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }));
+      setSelectAuthor(data);
+    } catch (error) {
+      setNotification({
+        show: true,
+        type: "Danger",
+        message: error.message,
+      });
+    }
+  };
+
+  const handleRefreshClickAuthor = () => {
+    fetchDataAndUpdateAuthor();
+  };
 
   const { res: resGmd } = useFetcher("gmd");
 
@@ -105,6 +328,34 @@ export default function AddBookDetail() {
     }
   }, [resPlace]);
 
+  const fetchDataAndUpdatePlace = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.get("https://wezady.my.id/api/place", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const responseData = response.data.data;
+      const data = responseData.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }));
+      setSelectPlace(data);
+    } catch (error) {
+      setNotification({
+        show: true,
+        type: "Danger",
+        message: error.message,
+      });
+    }
+  };
+
+  const handleRefreshClickPlace = () => {
+    fetchDataAndUpdatePlace();
+  };
+
   const { res: resPublisher } = useFetcher("publisher");
 
   useEffect(() => {
@@ -116,6 +367,34 @@ export default function AddBookDetail() {
       setSelectPublisher(data);
     }
   }, [resPublisher]);
+
+  const fetchDataAndUpdatePublisher = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.get("https://wezady.my.id/api/publisher", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const responseData = response.data.data;
+      const data = responseData.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }));
+      setSelectPublisher(data);
+    } catch (error) {
+      setNotification({
+        show: true,
+        type: "Danger",
+        message: error.message,
+      });
+    }
+  };
+
+  const handleRefreshClickPublisher = () => {
+    fetchDataAndUpdatePublisher();
+  };
 
   const { res: resSubject } = useFetcher("subject");
 
@@ -253,14 +532,59 @@ export default function AddBookDetail() {
             />
           </Label>
           <Label label="Author *">
-            <Selects
-              search
-              list={selectAuthor}
-              placeholder="Pilih Author"
-              handleChange={(item) =>
-                setForm({ ...form, authors_id: item.value })
-              }
-            />
+            <div className="flex gap-4">
+              <Selects
+                search
+                list={selectAuthor}
+                placeholder="Pilih Author"
+                handleChange={(item) =>
+                  setForm({ ...form, authors_id: item.value })
+                }
+              />
+              <Button handleClick={handleCreateAuthor}>+</Button>
+            </div>
+            {createAuthor ? (
+              <div className="gap-4 flex">
+                <Label
+                  label="Create Author"
+                  typeStyle={"w-full"}
+                  childrenStyle={"flex gap-4 items-stretch"}
+                >
+                  <Label label="Author Name" typeStyle={"w-full"}>
+                    <InputFields
+                      type="text"
+                      style="w-full"
+                      placeholder="Author Name"
+                      title="Author Name"
+                      value={formAuthor.name}
+                      setValue={(e) =>
+                        setFormAuthor({ ...formAuthor, name: e.target.value })
+                      }
+                    />
+                  </Label>
+                  <Label
+                    label="Author type"
+                    typeStyle={"w-full"}
+                    childrenStyle={"flex gap-4"}
+                  >
+                    <Selects
+                      list={pilihan_type}
+                      placeholder="Pilih Author Type"
+                      handleChange={(item) =>
+                        setFormAuthor({ ...formAuthor, type: item.value })
+                      }
+                    />
+                    <Button
+                      action="primary"
+                      handleClick={handleSubmitAddAuthor}
+                      style={"self-end"}
+                    >
+                      Save
+                    </Button>
+                  </Label>
+                </Label>
+              </div>
+            ) : null}
           </Label>
           <div className="grid grid-cols-3 gap-4">
             <Label label="Statement of Responsibility">
@@ -355,14 +679,46 @@ export default function AddBookDetail() {
           </Label>
           <div className="grid grid-cols-3 gap-4">
             <Label label="Publisher *">
-              <Selects
-                search
-                list={selectPublisher}
-                placeholder="Pilih Publisher"
-                handleChange={(item) =>
-                  setForm({ ...form, publishers_id: item.value })
-                }
-              />
+              <div className="flex gap-4">
+                <Selects
+                  search
+                  list={selectPublisher}
+                  placeholder="Pilih Publisher"
+                  handleChange={(item) =>
+                    setForm({ ...form, publishers_id: item.value })
+                  }
+                />
+                <Button handleClick={handleCreatePublisher}>+</Button>
+              </div>
+              {createPublisher ? (
+                <div className="gap-4">
+                  <Label
+                    label="Publisher Name"
+                    typeStyle={"w-full"}
+                    childrenStyle={"flex gap-4"}
+                  >
+                    <InputFields
+                      type="text"
+                      style="w-full"
+                      placeholder="Publisher Name"
+                      title="Publisher Name"
+                      value={formPublisher.name}
+                      setValue={(e) =>
+                        setFormPublisher({
+                          ...formPublisher,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                    <Button
+                      action="primary"
+                      handleClick={handleSubmitAddPublsiher}
+                    >
+                      Save
+                    </Button>
+                  </Label>
+                </div>
+              ) : null}
             </Label>
             <Label label="Publisher Year *">
               <InputFields
@@ -377,23 +733,49 @@ export default function AddBookDetail() {
               />
             </Label>
             <Label label="Publisher Place *">
-              <Selects
-                search
-                list={selectPlace}
-                placeholder="Pilih Publisher Place"
-                handleChange={(item) =>
-                  setForm({ ...form, places_id: item.value })
-                }
-              />
+              <div className="flex gap-4">
+                <Selects
+                  search
+                  list={selectPlace}
+                  placeholder="Pilih Publisher Place"
+                  handleChange={(item) =>
+                    setForm({ ...form, places_id: item.value })
+                  }
+                />
+                <Button handleClick={handleCreatePlace}>+</Button>
+              </div>
+              {createPlace ? (
+                <div className="flex gap-4">
+                  <Label
+                    label="Place Name"
+                    typeStyle={"w-full"}
+                    childrenStyle={"flex gap-4"}
+                  >
+                    <InputFields
+                      type="text"
+                      style="w-full grow"
+                      placeholder="Place Name"
+                      title="Place Name"
+                      value={formPlace.name}
+                      setValue={(e) =>
+                        setFormPlace({ ...formPlace, name: e.target.value })
+                      }
+                    />
+                    <Button action="primary" handleClick={handleSubmitAddPlace}>
+                      Save
+                    </Button>
+                  </Label>
+                </div>
+              ) : null}
             </Label>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            <Label label="collation">
+            <Label label="Collation">
               <InputFields
                 type="text"
                 style="w-full"
-                placeholder="collation"
-                title="collation"
+                placeholder="Collation"
+                title="Collation"
                 value={form.collation}
                 setValue={(e) =>
                   setForm({ ...form, collation: e.target.value })
@@ -502,11 +884,7 @@ export default function AddBookDetail() {
           </Label>
         </div>
         <div className="flex flex-row justify-end gap-4">
-          <Button
-            action="light"
-            link="/bookDetail"
-            handleClick={resetForm}
-          >
+          <Button action="light" link="/bookDetail" handleClick={resetForm}>
             Cancel
           </Button>
           <Button action="primary" handleClick={handleSubmitAdd}>
