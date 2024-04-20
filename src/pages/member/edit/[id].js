@@ -44,29 +44,19 @@ const EditRole = ({ id }) => {
     isError: isErrorConfigRFID,
   } = useFetcher("configrfid");
 
-  useEffect(() => {
-    if (resConfigRFID) {
-      const data = resConfigRFID.data.map((configrfid) => configrfid.ip);
-      setIpconfig(data);
-    }
-  }, [resConfigRFID]);
-
   const fetchDataAndUpdate = async () => {
     try {
-      const response = await axios.get(ipConfig);
-      const data = response.data;
-      setForm({ ...form, rfid: data.UID });
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    if (form.rfid == "") {
-      fetchDataAndUpdate();
+      const response = await axios.get("https://wezady.my.id/api/public/rfiddata");
+      const data = response.data.data;
+      setForm({ ...form, rfid: data[0].rfid_data});
+    } catch (error) {
+      setForm({ ...form, rfid: "" });
     }
-  }, [form]);
+  };
 
   const handleRefreshClick = () => {
     setForm({ ...form, rfid: "" });
+    fetchDataAndUpdate();
   };
 
   const handleCheck = () => {

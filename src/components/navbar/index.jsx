@@ -44,21 +44,23 @@ const Navbar = ({ home, children }) => {
     <React.Fragment>
       {home ? (
         <div className="bg-black">
-          <header className="bg-[url('/2495.jpg')] h-[460px] py-4 ">
+          <header className="bg-[url('/2495.jpg')] h-[360px] py-4 opacity-100 ">
             <div className="container mx-auto px-8 lg:px-16 h-full text-white">
               <div className="flex justify-between">
                 <div className="flex text-sm justify-center items-center space-x-4">
                   <Image
-                    className="w-48"
-                    src="/logo.png"
+                    className="w-20 h-16"
+                    src="/logo.svg"
                     alt="LOGO"
                     title="LOGO"
                     width={50}
                     height={50}
                   />
-                  {/* <div className="w-32 font-bold">
-                    Sekolah Kristen Kalam Kudus 2 Batam
-                  </div> */}
+                  <div className="w-54 font-bold ">
+                    <p>Sekolah Kristen</p>
+                    <p>Kalam Kudus 2</p>
+                    <p>Batam</p>
+                  </div>
                 </div>
                 <ul className="flex gap-4 items-center">
                   <li>
@@ -180,14 +182,16 @@ const Navbar = ({ home, children }) => {
             <div className="flex justify-between items-center h-full">
               <div className="flex text-sm justify-center items-center space-x-4">
                 <Image
-                  className="w-48"
-                  src="/logo.png"
+                  className="w-20 h-16"
+                  src="/logo.svg"
                   alt="LOGO"
                   title="LOGO"
                   width={50}
                   height={50}
                 />
-                {/* <div className="w-32">Sekolah Kristen Kalam Kudus 2 Batam</div> */}
+                <div className="w-54 font-bold">
+                  <p>Sekolah Kristen</p> <p>Kalam Kudus 2</p> <p>Batam</p>
+                </div>
               </div>
               <ul className="flex gap-4 items-center">
                 <li>

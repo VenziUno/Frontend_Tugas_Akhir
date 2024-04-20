@@ -6,6 +6,7 @@ import { useFetcher } from "@/hooks/useFetcher";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FaWindowClose } from "react-icons/fa";
+import { HiOutlineXCircle } from "react-icons/hi2";
 
 const Landing = () => {
   const { basic } = useAppContext();
@@ -349,41 +350,47 @@ const Landing = () => {
               </div>
             </div>
             <div className=" hidden gap-4 lg:flex">
-              <a  href="filterKatalogBook?subject=S004">
+              <a href="filterKatalogBook?subject=S004">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                Computer Science
+                  Computer Science
                 </div>
               </a>
               <a href="filterKatalogBook?subject=S003">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                The book
+                  The book
                 </div>
               </a>
               <a href="filterKatalogBook?subject=S006">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                 Special Computer Methods
+                  Special Computer Methods
                 </div>
               </a>
               <a href="filterKatalogBook?subject=S005">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                Computer programming
+                  Computer programming
                 </div>
               </a>
               <a href="filterKatalogBook?subject=S001">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                Knowledge
+                  Knowledge
                 </div>
               </a>
             </div>
             <div>
-              <div className="place-items-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4">
-                {dataTableGedung2 &&
-                  dataTableGedung2
-                    .slice(0, 4)
-                    .map((item, index) => (
-                      <CardKatalog key={index} index={index} data={item} />
-                    ))}
-              </div>
+              {dataTableGedung2 && dataTableGedung2.length > 0 ? (
+                <div className="place-items-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4">
+                  {dataTableGedung2.slice(0, 4).map((item, index) => (
+                    <CardKatalog key={index} index={index} data={item} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col align-middle justify-center items-center gap-2 h-60">
+                  <HiOutlineXCircle size={80} className="text-primary-400" />
+                  <span className="text-5xl font-medium text-primary-400">
+                    Data Not Found
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <div className="mx-auto px-6 sm:px-12 md:px-16 lg:px-20 xl:px-24 space-y-4 py-6">
@@ -402,39 +409,45 @@ const Landing = () => {
             <div className=" hidden gap-4 lg:flex">
               <a href="filterKatalogBook?subject=S001">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                Knowledge
+                  Knowledge
                 </div>
               </a>
               <a href="filterKatalogBook?subject=S002">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                The book
+                  The book
                 </div>
               </a>
               <a href="filterKatalogBook?subject=S003">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                Systems
+                  Systems
                 </div>
               </a>
               <a href="filterKatalogBook?subject=S004">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                Computer Science
+                  Computer Science
                 </div>
               </a>
               <a href="filterKatalogBook?subject=S005">
                 <div className="rounded-full border border-slate-400 px-4 py-2 hover:bg-slate-400 hover:text-white">
-                Computer programming
+                  Computer programming
                 </div>
               </a>
             </div>
             <div>
-              <div className="place-items-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4">
-                {dataTableGedung &&
-                  dataTableGedung
-                    .slice(0, 4)
-                    .map((item, index) => (
-                      <CardKatalog key={index} index={index} data={item} />
-                    ))}
-              </div>
+              {dataTableGedung && dataTableGedung.length > 0 ? (
+                <div className="place-items-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4">
+                  {dataTableGedung.slice(0, 4).map((item, index) => (
+                    <CardKatalog key={index} index={index} data={item} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col align-middle justify-center items-center gap-2 h-60">
+                  <HiOutlineXCircle size={80} className="text-primary-400" />
+                  <span className="text-5xl font-medium text-primary-400">
+                    Data Not Found
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

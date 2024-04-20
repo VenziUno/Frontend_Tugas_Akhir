@@ -6,6 +6,7 @@ import Navbar from "@/components/navbar";
 import { useFetcher } from "@/hooks/useFetcher";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { HiOutlineXCircle } from "react-icons/hi2";
 
 export default function FilterKatalogBook() {
   const [label, setLabel] = useState([]);
@@ -41,9 +42,8 @@ export default function FilterKatalogBook() {
       const grade_id = location.query.subject;
       setSubjectSearch({ grade_id });
     }
-  }, [location.query.callnumber,location.query.subject]); // Specify the dependency here
+  }, [location.query.callnumber, location.query.subject]); // Specify the dependency here
 
-  
   const {
     res: resLabel,
     isLoading: isLoadingLabel,
@@ -119,6 +119,7 @@ export default function FilterKatalogBook() {
       let filteredDatas = data;
       filteredDatas = filteredData.filter((item) => item.opac !== 0);
       setDataTableGedung(filteredDatas);
+      location.push('/filterKatalogBook')
     }
   }, [res]);
 
@@ -212,14 +213,20 @@ export default function FilterKatalogBook() {
               </div>
             </div>
             <div>
-              <div className="place-items-center gap-y-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                {dataTableGedung &&
-                  dataTableGedung
-                    .slice(0, 15)
-                    .map((item, index) => (
-                      <CardKatalog key={index} index={index} data={item} />
-                    ))}
-              </div>
+              {dataTableGedung && dataTableGedung.length > 0 ? (
+                <div className="place-items-center gap-y-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                  {dataTableGedung.slice(0, 15).map((item, index) => (
+                    <CardKatalog key={index} index={index} data={item} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col align-middle justify-center items-center gap-2 h-96">
+                  <HiOutlineXCircle size={80} className="text-primary-400" />
+                  <span className="text-5xl font-medium text-primary-400">
+                    Data Not Found
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

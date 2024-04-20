@@ -48,9 +48,9 @@ export default function Borrowing() {
 
   const fetchDataAndUpdates = async () => {
     try {
-      const response = await axios.get(ipConfig);
-      const data = response.data;
-      setForm({ ...form, rfid: data.UID });
+      const response = await axios.get("https://wezady.my.id/api/public/rfiddata");
+      const data = response.data.data;
+      setForm({ ...form, rfid: data[0].rfid_data});
     } catch (error) {
       setForm({ ...form, rfid: "" });
     }
@@ -69,7 +69,7 @@ export default function Borrowing() {
   };
 
   const handleCheck = () => {
-    if (form.id === "") {
+    if (borrowing === null) {
       setNotification({
         show: true,
         type: "Warning",

@@ -41,22 +41,26 @@ const Sidebar = () => {
       className="relative w-full bg-primary-500 text-black shadow flex flex-col gap-6 px-6 py-6 rounded-lg max-w-[256px] "
       style={{ height: "calc(100vh - 32px)" }}
     >
-      <div className="flex text-3xl justify-center items-center space-x-4 ">
+      <div className="flex justify-center items-center space-x-4 ">
         <Image
-          className="w-56 h-20"
-          src="/logo.png"
+          className="w-16 h-20"
+          src="/logo.svg"
           alt="LOGO"
           title="LOGO"
           width={250}
           height={250}
         />
-        {/* <div>LOGO</div> */}
+        <div className="w-40 font-bold ">
+          <p>Sekolah Kristen</p>
+          <p>Kalam Kudus 2</p>
+          <p>Batam</p>
+        </div>
       </div>
       <div className="space-y-2 flex flex-col gap-1 pr-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-primary-500 scrollbar-thumb-rounded scrollbar-track-rounded hover:scrollbar-thumb-primary-300 overflow-y-auto">
         {member ? (
           <React.Fragment>
             <div className="flex flex-col gap-1 bg-primary-500">
-            <Link href="/" legacyBehavior>
+              <Link href="/" legacyBehavior>
                 <a className="p-2 hover:bg-primary-200">
                   <div className="flex flex-row justify-between items-center gap-4">
                     <div className="flex flex-row items-center ">

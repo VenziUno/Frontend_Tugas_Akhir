@@ -263,13 +263,13 @@ export const useMenuProvider = () => {
           //   title: "Activity Log Details",
           //   detail: "See Authorization details here!",
           // },
-          {
-            id: 10,
-            route: "/settings/configRfid",
-            name: "Config RFID",
-            title: "Authorization Details",
-            detail: "See Authorization details here!",
-          },
+          // {
+          //   id: 10,
+          //   route: "/settings/configRfid",
+          //   name: "Config RFID",
+          //   title: "Authorization Details",
+          //   detail: "See Authorization details here!",
+          // },
         ],
       },
       {

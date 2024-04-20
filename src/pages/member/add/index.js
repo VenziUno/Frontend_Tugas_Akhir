@@ -21,22 +21,12 @@ export default function AddMember() {
     handleShowNotification,
   } = basic;
   const router = useRouter();
-  const [ipConfig, setIpconfig] = useState("");
-
-  const { res, isLoading, isError } = useFetcher("configrfid");
-
-  useEffect(() => {
-    if (res) {
-      const data = res.data.map((configrfid) => configrfid.ip);
-      setIpconfig(data);
-    }
-  }, [res]);
 
   const fetchDataAndUpdate = async () => {
     try {
-      const response = await axios.get(ipConfig);
-      const data = response.data;
-      setForm({ ...form, rfid: data.UID });
+      const response = await axios.get("https://wezady.my.id/api/public/rfiddata");
+      const data = response.data.data;
+      setForm({ ...form, rfid: data[0].rfid_data});
     } catch (error) {
       setForm({ ...form, rfid: "" });
     }
