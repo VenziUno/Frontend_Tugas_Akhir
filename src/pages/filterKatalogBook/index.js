@@ -205,12 +205,12 @@ export default function FilterKatalogBook() {
                 typeStyle={"hidden md:block"}
                 label={"Found from your keywords :"}
               />
-              <div className="flex items-center gap-4">
+              {/* <div className="flex items-center gap-4">
                 <Label label={"Sort by :"}></Label>
                 <div>
                   <InputFields />
                 </div>
-              </div>
+              </div> */}
             </div>
             <div>
               {dataTableGedung && dataTableGedung.length > 0 ? (
