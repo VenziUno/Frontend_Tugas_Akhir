@@ -215,7 +215,7 @@ export default function FilterKatalogBook() {
             <div>
               {dataTableGedung && dataTableGedung.length > 0 ? (
                 <div className="place-items-center gap-y-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                  {dataTableGedung.slice(0, 15).map((item, index) => (
+                  {dataTableGedung.map((item, index) => (
                     <CardKatalog key={index} index={index} data={item} />
                   ))}
                 </div>
