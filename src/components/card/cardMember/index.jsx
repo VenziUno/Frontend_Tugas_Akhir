@@ -5,12 +5,12 @@ const CardMember = forwardRef(({ printItem, printItemValue }, ref) => {
   const items = printItem || [];
 
   return (
-    <div ref={ref} className="grid grid-cols-2 gap-4 p-2">
+    <div ref={ref} className="grid grid-cols-2 gap-4 p-2 place-items-start">
       {printItem &&
         printItem.map((printItem, index) => (
           <div
             key={index}
-            className="relative isolate flex items-center align-middle justify-center flex-col overflow-hidden rounded-2xl p-4 w-[322.97px] h-[204.02px]"
+            className={`relative isolate flex items-center align-middle justify-center flex-col overflow-hidden rounded-2xl p-4 w-[322.97px] h-[204.02px] ${index % 10 === 0 ? 'page-break' : ''}`}
           >
             <Image
               src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a"

@@ -58,7 +58,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (resMember) {
-      const data = resBook.data.map((gedung) => {
+      const data = resMember.data.map((gedung) => {
         
       });
       setTotalMembers(data.length);
