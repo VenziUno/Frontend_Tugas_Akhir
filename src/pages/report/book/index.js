@@ -10,11 +10,13 @@ import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 
 export default function ReportBook({ page }) {
-  const { res, isLoading, isError } = useFetcher("book");
+  const { res, isLoading, isError } = useFetcher("book",page);
+  const { res:resDetail} = useFetcher("book");
   const { basic } = useAppContext();
   const { search, move, setMove, route } = basic;
   const location = useRouter();
   const [dataTableGedung, setDataTableGedung] = useState(null);
+  const [dataTableGedung2, setDataTableGedung2] = useState(null);
   const [dataPagination, setDataPagination] = useState(null);
   const [totalLoanStock, setTotalLoanStock] = useState(null);
   const [totalAvailableStock, setTotalAvailableStock] = useState(null);
@@ -22,8 +24,8 @@ export default function ReportBook({ page }) {
   const [totalRepairStock, setTotalRepairStock] = useState(null);
 
   useEffect(() => {
-    if (res) {
-      const data = res.data.map((gedung) => {
+    if (resDetail) {
+      const data = resDetail.data.map((gedung) => {
         const arr = Object.entries(gedung);
         const filterArr = arr.filter(
           ([key, value]) =>
@@ -107,6 +109,66 @@ export default function ReportBook({ page }) {
       setTotalMissingStock(totalMissingStock);
       setTotalRepairStock(totalRepairStock);
 
+      setDataTableGedung2(data);
+      setDataPagination(res.data);
+      if (search && move) {
+        setMove(false);
+        location.push(`${route}?page=1`);
+      }
+    }
+
+    if (res) {
+      const data = res.data.data.map((gedung) => {
+        const arr = Object.entries(gedung);
+        const filterArr = arr.filter(
+          ([key, value]) =>
+            key !== "status" &&
+            key !== "publisher_year" &&
+            key !== "gmds_id" &&
+            key !== "edition" &&
+            key !== "publishers_id" &&
+            key !== "authors_id" &&
+            key !== "statement_of_responsibility" &&
+            key !== "specific_detail_info" &&
+            key !== "content_types_id" &&
+            key !== "media_types_id" &&
+            key !== "carrier_types_id" &&
+            key !== "places_id" &&
+            key !== "collation" &&
+            key !== "series_title" &&
+            key !== "call_number" &&
+            key !== "subjects_id" &&
+            key !== "doc_languages_id" &&
+            key !== "opac" &&
+            key !== "labels_id" &&
+            key !== "isbn_issn" &&
+            key !== "file" &&
+            key !== "current_stock" &&
+            key !== "desc" &&
+            typeof value !== "object"
+        );
+        const newObj = Object.fromEntries(filterArr);
+        const itemCount = gedung.book_detail_status.filter(
+          (item) => item.item_status.id === "IS001"
+        ).length;
+        const itemLoan = gedung.book_detail_status.filter(
+          (item) => item.item_status.id === "IS002"
+        ).length;
+        const itemMissing = gedung.book_detail_status.filter(
+          (item) => item.item_status.id === "IS003"
+        ).length;
+        const itemRepair = gedung.book_detail_status.filter(
+          (item) => item.item_status.id === "IS004"
+        ).length;
+        const newData = {
+          ...newObj,
+          available_stock: `${itemCount} Book`,
+          loan_stock: `${itemLoan} Book`,
+          missing_stock: `${itemMissing} Book`,
+          repair_stock: `${itemRepair} Book`,
+        };
+        return newData;
+      });
       setDataTableGedung(data);
       setDataPagination(res.data);
       if (search && move) {
@@ -114,11 +176,11 @@ export default function ReportBook({ page }) {
         location.push(`${route}?page=1`);
       }
     }
-  }, [res]);
+  }, [res, resDetail]);
 
 
   const handleDownload = () => {
-    const rows = dataTableGedung.map((item, index) => ({
+    const rows = dataTableGedung2.map((item, index) => ({
       no: index + 1,
       book_title: item.title,
       available_stock: item.available_stock,
@@ -175,7 +237,7 @@ export default function ReportBook({ page }) {
       <Tabel
         title="Book List"
         data={dataTableGedung}
-        // pagination={dataPagination}
+        pagination={dataPagination}
       />
     </Layout>
   );
