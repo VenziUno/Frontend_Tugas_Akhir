@@ -111,36 +111,47 @@ const TableBody = ({
 
   function parseBorrowingDate(borrowingDate) {
     // Parsing string "Senin, 13 Mei 2024"
-    const [, dayOfMonth, monthName, year] = borrowingDate.match(/(\d{1,2}) (\w+) (\d{4})/);
-  
+    const [, dayOfMonth, monthName, year] = borrowingDate.match(
+      /(\d{1,2}) (\w+) (\d{4})/
+    );
+
     // Membuat pemetaan nama bulan ke angka bulan
     const monthMap = {
-      'Januari': '01', 'Februari': '02', 'Maret': '03', 'April': '04', 
-      'Mei': '05', 'Juni': '06', 'Juli': '07', 'Agustus': '08', 
-      'September': '09', 'Oktober': '10', 'November': '11', 'Desember': '12'
+      Januari: "01",
+      Februari: "02",
+      Maret: "03",
+      April: "04",
+      Mei: "05",
+      Juni: "06",
+      Juli: "07",
+      Agustus: "08",
+      September: "09",
+      Oktober: "10",
+      November: "11",
+      Desember: "12",
     };
-  
+
     // Mendapatkan angka bulan berdasarkan nama bulan
     const monthNumber = monthMap[monthName];
-  
+
     // Menghasilkan tanggal dalam format "DDMMYYYY"
     const formattedDate = `${dayOfMonth}${monthNumber}${year.slice(-4)}`;
-  
+
     return formattedDate;
   }
-  
+
   function calculateDueDate(startDate, daysToAdd) {
     // Parsing tanggal "DDMMYYYY" ke Date object
     const day = parseInt(startDate.substr(0, 2), 10);
     const month = parseInt(startDate.substr(2, 2), 10) - 1; // Bulan di JavaScript dimulai dari 0 (Januari = 0)
     const year = parseInt(startDate.substr(4, 4), 10);
-  
+
     const dueDate = new Date(year, month, day);
     dueDate.setDate(dueDate.getDate() + daysToAdd);
-  
+
     return dueDate;
   }
-  
+
   function formatDate(date) {
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -304,7 +315,7 @@ const TableBody = ({
                   </div>
                 ) : head === "approval" ? (
                   <div>
-                    {actionRequest && item[head] === 1 && (
+                    {actionRequest && item[head] === "1" && (
                       <Button
                         action="success"
                         handleClick={(e) => {
@@ -316,6 +327,7 @@ const TableBody = ({
                           );
                         }}
                       >
+
                         <FiCheck size={20} />
                       </Button>
                     )}
@@ -323,9 +335,7 @@ const TableBody = ({
                       <Button
                         handleClick={(e) => {
                           e.preventDefault();
-                          handleExtensionMember(
-                            item.id,
-                          );
+                          handleExtensionMember(item.id);
                         }}
                       >
                         Extension

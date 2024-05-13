@@ -109,6 +109,7 @@ export default function Member({ page }) {
     }
   }, [res]);
 
+  console.log(dataTableGedung)
 
   return (
     <Layout notif={notif} >
