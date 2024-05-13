@@ -228,8 +228,8 @@ export default function ReportBook({ page }) {
         </div>
         <div className="flex gap-4 justify-between">
           <div className="flex align-middle items-center gap-4">
-            <Label label="Filter:"></Label>
-            <InputFields></InputFields>
+            {/* <Label label="Filter:"></Label> */}
+            {/* <InputFields></InputFields> */}
           </div>
           <Button handleClick={handleDownload}>Export</Button>
         </div>

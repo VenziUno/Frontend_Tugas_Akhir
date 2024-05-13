@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import Selects from "@/components/selects";
 import ImageUploader from "@/components/imageUploader";
+import TextArea from "@/components/textArea";
 
 export default function AddMember() {
   const { member, basic } = useAppContext();
@@ -236,7 +237,7 @@ export default function AddMember() {
           </Label>
           </div>
           <Label label="Address">
-            <InputFields
+            <TextArea
               type="text"
               style="w-full"
               placeholder="Address"
@@ -245,7 +246,7 @@ export default function AddMember() {
               setValue={(e) => setForm({ ...form, address: e.target.value })}
             />
           </Label>
-          <Label label="Photo">
+          {/* <Label label="Photo">
             <ImageUploader
               type="file"
               style="w-full"
@@ -257,7 +258,7 @@ export default function AddMember() {
                   }
               }
             />
-          </Label>
+          </Label> */}
         </div>
         <div className="flex flex-row justify-end gap-4">
           <Button action="light" link="/member" handleClick={resetForm}>

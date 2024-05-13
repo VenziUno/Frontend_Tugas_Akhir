@@ -32,6 +32,7 @@ export default function Member({ page }) {
             key !== "class" &&
             key !== "portal_code" &&
             key !== "notes" &&
+            key !== "file" &&
             // key !== "rfid" &&
             key !== "users_id" &&
             typeof value !== "object"
