@@ -10,7 +10,9 @@ const CardMember = forwardRef(({ printItem, printItemValue }, ref) => {
         printItem.map((printItem, index) => (
           <div
             key={index}
-            className={`relative isolate flex items-center align-middle justify-center flex-col overflow-hidden rounded-2xl p-4 w-[322.97px] h-[204.02px] ${index % 10 === 0 ? 'page-break' : ''}`}
+            className={`relative isolate flex items-center align-middle justify-center flex-col overflow-hidden rounded-2xl p-4 w-[322.97px] h-[204.02px] ${
+              index % 10 === 0 ? "page-break" : ""
+            }`}
           >
             <Image
               src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a"
@@ -21,13 +23,13 @@ const CardMember = forwardRef(({ printItem, printItemValue }, ref) => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
             <div className="z-10 flex space-x-2 align-middle items-center">
-              <Image
-                src={printItem.file || "/download.png"}
+              {/* <Image
+                src={"/download.png"}
                 alt="Card Member"
                 className="object-cover"
                 width={100}
                 height={100}
-              />
+              /> */}
               <table className="text-white">
                 <tbody>
                   <tr>
@@ -61,13 +63,13 @@ const CardMember = forwardRef(({ printItem, printItemValue }, ref) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
           <div className="z-10 flex space-x-8 align-middle items-center">
-            <Image
-              src={printItemValue.file}
+            {/* <Image
+              src={"/download.png"}
               alt="Card Member"
               className="object-cover"
               width={100}
               height={100}
-            />
+            /> */}
             <table className="text-white">
               <tbody>
                 <tr>
