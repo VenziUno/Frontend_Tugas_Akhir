@@ -110,35 +110,44 @@ const TableBody = ({
   }
 
   function parseBorrowingDate(borrowingDate) {
-    // Parsing string "Senin, 13 Mei 2024"
-    const [, dayOfMonth, monthName, year] = borrowingDate.match(
-      /(\d{1,2}) (\w+) (\d{4})/
-    );
-
-    // Membuat pemetaan nama bulan ke angka bulan
+    // Pemetaan nama bulan ke angka bulan dengan nama bulan tiga huruf
     const monthMap = {
-      Januari: "01",
-      Februari: "02",
-      Maret: "03",
-      April: "04",
+      Jan: "01",
+      Feb: "02",
+      Mar: "03",
+      Apr: "04",
       Mei: "05",
-      Juni: "06",
-      Juli: "07",
-      Agustus: "08",
-      September: "09",
-      Oktober: "10",
-      November: "11",
-      Desember: "12",
+      Jun: "06",
+      Jul: "07",
+      Agu: "08",
+      Sep: "09",
+      Okt: "10",
+      Nov: "11",
+      Des: "12",
     };
-
-    // Mendapatkan angka bulan berdasarkan nama bulan
+  
+    // Parsing string tanggal dengan mengabaikan hari dalam seminggu
+    const match = borrowingDate.match(/(?:\w+),\s*(\d{1,2})\s*(\w{3})\s*(\d{4})/);
+    if (!match) {
+      throw new Error('Format tanggal tidak valid');
+    }
+  
+    const [, day, monthName, year] = match;
     const monthNumber = monthMap[monthName];
-
+  
+    if (!monthNumber) {
+      throw new Error('Nama bulan tidak valid');
+    }
+  
+    // Memastikan day memiliki dua digit
+    const dayWithTwoDigits = day.padStart(2, '0');
+  
     // Menghasilkan tanggal dalam format "DDMMYYYY"
-    const formattedDate = `${dayOfMonth}${monthNumber}${year.slice(-4)}`;
-
+    const formattedDate = `${dayWithTwoDigits}${monthNumber}${year}`;
+  
     return formattedDate;
   }
+  
 
   function calculateDueDate(startDate, daysToAdd) {
     // Parsing tanggal "DDMMYYYY" ke Date object
