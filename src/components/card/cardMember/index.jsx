@@ -15,35 +15,27 @@ const CardMember = forwardRef(({ printItem, printItemValue }, ref) => {
             }`}
           >
             <Image
-              src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a"
+              src="/16282276_rm222batch2-mind-03.jpg"
               alt="Card Member"
               className="absolute inset-0 h-full w-full object-cover"
               width={100}
               height={100}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
             <div className="z-10 flex space-x-2 align-middle items-center">
-              {/* <Image
-                src={"/download.png"}
-                alt="Card Member"
-                className="object-cover"
-                width={100}
-                height={100}
-              /> */}
-              <table className="text-white">
+              <table className="text-black text-xl">
                 <tbody>
                   <tr>
-                    <td className="w-full">NIS</td>
+                    <td>NIS</td>
                     <td className="px-2">:</td>
                     <td>{printItem.nis}</td>
                   </tr>
                   <tr>
-                    <td className="w-full">Name</td>
+                    <td>Name</td>
                     <td className="px-2">:</td>
                     <td>{printItem.name}</td>
                   </tr>
                   <tr>
-                    <td className="w-full">Gender</td>
+                    <td>Gender</td>
                     <td className="px-2">:</td>
                     <td>{printItem.gender}</td>
                   </tr>
@@ -55,40 +47,27 @@ const CardMember = forwardRef(({ printItem, printItemValue }, ref) => {
       {printItemValue && (
         <div className="relative isolate flex items-center align-middle justify-center flex-col overflow-hidden rounded-2xl p-8 h-64 w-96">
           <Image
-            src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a"
+            src="/16282276_rm222batch2-mind-03.jpg"
             alt="Card Member"
             className="absolute inset-0 h-full w-full object-cover"
             width={100}
             height={100}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
           <div className="z-10 flex space-x-8 align-middle items-center">
-            {/* <Image
-              src={"/download.png"}
-              alt="Card Member"
-              className="object-cover"
-              width={100}
-              height={100}
-            /> */}
-            <table className="text-white">
+            <table className="text-black text-xl">
               <tbody>
                 <tr>
-                  <td className="w-full">NO</td>
-                  <td className="px-2">:</td>
-                  <td>{printItemValue.rfid}</td>
-                </tr>
-                <tr>
-                  <td className="w-full">NIS</td>
+                  <td>NIS</td>
                   <td className="px-2">:</td>
                   <td>{printItemValue.nis}</td>
                 </tr>
                 <tr>
-                  <td className="w-full">Name</td>
+                  <td>Name</td>
                   <td className="px-2">:</td>
                   <td>{printItemValue.name}</td>
                 </tr>
                 <tr>
-                  <td className="w-full">Gender</td>
+                  <td>Gender</td>
                   <td className="px-2">:</td>
                   <td>{printItemValue.gender}</td>
                 </tr>

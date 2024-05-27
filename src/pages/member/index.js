@@ -22,7 +22,10 @@ export default function Member({ page }) {
   useEffect(() => {
     if (res) {
       const data = res.data.data.map((gedung) => {
+        // Convert gedung object to an array of key-value pairs
         const arr = Object.entries(gedung);
+        
+        // Filter out unwanted keys
         const filterArr = arr.filter(
           ([key, value]) =>
             key !== "status" &&
@@ -33,13 +36,16 @@ export default function Member({ page }) {
             key !== "portal_code" &&
             key !== "notes" &&
             key !== "file" &&
+            key !== "gender" &&
             // key !== "rfid" &&
             key !== "users_id" &&
             typeof value !== "object"
         );
         const newObj = Object.fromEntries(filterArr);
+        newObj.gender = gedung.gender === 'P' ? 'Perempuan' : 'Laki - Laki';
         return newObj;
       });
+      
       setDataTableGedung(data);
       setDataPagination(res.data);
       if (search && move) {
