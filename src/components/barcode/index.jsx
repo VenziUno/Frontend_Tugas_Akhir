@@ -31,8 +31,8 @@ const Barcode = forwardRef(({ printItem, printItemValue }, ref) => {
                         <div className="flex">
                           <div className="flex flex-col grow justify-center align-middle items-center border-r-2 border-black">
                             <div>
-                              {item.title.length > 25
-                                ? item.title.slice(0, 20) + "..."
+                              {item.title.length > 15
+                                ? item.title.slice(0, 15) + "..."
                                 : item.title}
                             </div>
                             <BarcodeItem
@@ -42,7 +42,7 @@ const Barcode = forwardRef(({ printItem, printItemValue }, ref) => {
                                 .padStart(3, "0")}`}
                             />
                           </div>
-                          <div className="flex flex-col flex-none w-14 justify-center align-middle items-center px-6 py-4 ">
+                          <div className="flex flex-col flex-none w-16 justify-center align-middle items-center px-6 py-4 ">
                             <div>{item.call_number}</div>
                             <div className="uppercase">
                               {item.author_name.slice(0, 3)}
@@ -68,13 +68,13 @@ const Barcode = forwardRef(({ printItem, printItemValue }, ref) => {
               <div className="flex ">
                 <div className="flex flex-col grow justify-center align-middle items-center border-r-2 border-black">
                   <div>
-                    {printItemValue.book_name.length > 30
-                      ? printItemValue.book_name.slice(0, 25) + "..."
+                    {printItemValue.book_name.length > 15
+                      ? printItemValue.book_name.slice(0, 15) + "..."
                       : printItemValue.book_name}
                   </div>{" "}
                   <BarcodeItem value={printItemValue.isbn_issn} />
                 </div>
-                <div className="flex flex-col flex-none w-14 justify-center align-middle items-center px-6 py-4 ">
+                <div className="flex flex-col flex-none w-16 justify-center align-middle items-center px-6 py-4 ">
                   <div>{printItemValue.call_number}</div>
                   <div className="uppercase">
                     {printItemValue.author_name.slice(0, 3)}
@@ -94,8 +94,8 @@ const Barcode = forwardRef(({ printItem, printItemValue }, ref) => {
                     <div className="flex ">
                       <div className="flex flex-col grow justify-center align-middle items-center border-r-2 border-black">
                         <div>
-                          {printItemValue.title.length > 30
-                            ? printItemValue.title.slice(0, 25) + "..."
+                          {printItemValue.title.length > 15
+                            ? printItemValue.title.slice(0, 15) + "..."
                             : printItemValue.title}
                         </div>{" "}
                         <BarcodeItem
@@ -105,7 +105,7 @@ const Barcode = forwardRef(({ printItem, printItemValue }, ref) => {
                             .padStart(3, "0")}`}
                         />
                       </div>
-                      <div className="flex flex-col flex-none w-14 justify-center align-middle items-center px-6 py-4">
+                      <div className="flex flex-col flex-none w-16 justify-center align-middle items-center px-6 py-4">
                         <div>{printItemValue.call_number}</div>
                         <div className="uppercase">
                           {printItemValue.author_name.slice(0, 3)}

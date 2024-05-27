@@ -225,7 +225,7 @@ const DetailKatalog = ({ page }) => {
                     </div>
                   </div>
                   <div className="text-2xl font-bold">Decription Book</div>
-                  <div className="text-xl font-bold">
+                  <div className="text-xl">
                     {dataKatalog.desc ? dataKatalog.desc : "-"}
                   </div>
                 </div>
