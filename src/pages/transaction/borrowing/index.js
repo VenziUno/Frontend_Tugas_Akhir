@@ -208,7 +208,7 @@ export default function Borrowing() {
   useEffect(() => {
     if (bookData && bookData !== null) {
       const loanDate = new Date();
-      const dueDate = calculateDueDate(loanDate, 14);
+      const dueDate = calculateDueDate(loanDate, 3);
 
       const { id, isbn_issn, books_id, book } = bookData;
       const newData = {

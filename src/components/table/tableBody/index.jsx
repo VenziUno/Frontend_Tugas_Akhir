@@ -222,7 +222,7 @@ const TableBody = ({
   const handleExtension = async (id, borrowingDate, borrowingApporval) => {
     try {
       const formattedDate = parseBorrowingDate(borrowingDate);
-      const newDueDate = calculateDueDate(formattedDate, 8);
+      const newDueDate = calculateDueDate(formattedDate, 3);
       form.due_date = formatDate(newDueDate);
       form.approval = borrowingApporval;
 
