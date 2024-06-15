@@ -3,12 +3,25 @@ import CardKatalog from "@/components/card/cardKatalog";
 import InputFields from "@/components/inputFields";
 import Label from "@/components/label";
 import Navbar from "@/components/navbar";
+import TableBottomNav from "@/components/table/tableBottomNav";
+import { useAppContext } from "@/hooks/useAppContext";
 import { useFetcher } from "@/hooks/useFetcher";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { HiOutlineXCircle } from "react-icons/hi2";
 
-export default function FilterKatalogBook() {
+export default function FilterKatalogBook({ page }) {
+  const { basic } = useAppContext();
+  const {
+    form,
+    search,
+    move,
+    setMove,
+    route,
+    notification,
+    setNotification,
+    handleShowNotification,
+  } = basic;
   const [isLoading, setIsLoading] = useState(true);
   const [label, setLabel] = useState([]);
   const [subject, setSubject] = useState([]);
@@ -26,33 +39,71 @@ export default function FilterKatalogBook() {
   ]);
   const [subjectSearch, setSubjectSearch] = useState([]);
   const [callNumberSearch, setCallNumberSearch] = useState([]);
+  const [pagination, setDataPagination] = useState(null);
   const [gmd, setGMD] = useState([]);
   const [gmdSearch, setGMDSearch] = useState([]);
   const [docLanguage, setDocLanguage] = useState([]);
   const [language, setLanguage] = useState("");
   const [labelSearch, setLabelSearch] = useState([]);
 
-  const location = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
-    if (location.query.callnumber) {
-      const grade_id = location.query.callnumber;
+    if (router.query.callnumber) {
+      const grade_id = router.query.callnumber.split(',');
       setCallNumberSearch({ grade_id });
     }
-    if (location.query.subject) {
-      const grade_id = location.query.subject;
+    if (router.query.subject) {
+      const grade_id = router.query.subject.split(',');
       setSubjectSearch({ grade_id });
     }
-  }, [location.query.callnumber, location.query.subject]); // Specify the dependency here
+    if (router.query.label) {
+      const grade_id = router.query.label.split(',');
+      setLabelSearch({ grade_id });
+    }
+    if (router.query.gmdSearch) {
+      const grade_id = router.query.gmdSearch.split(',');
+      setGMDSearch({ grade_id });
+    }
+    if (router.query.doclanguage) {
+      const grade_id = router.query.doclanguage.split(',');
+      setLanguage({ grade_id });
+    }
+  }, [router.query]);
+
+  const updateUrl = (queryParam, selectedValues) => {
+    const newQueryParams = {
+      ...router.query,
+      [queryParam]: selectedValues.join(','),
+      page: 1 // Reset to page 1
+    };
+
+    // Remove query parameters that have undefined or empty values
+    Object.keys(newQueryParams).forEach(key => {
+      if (!newQueryParams[key] || newQueryParams[key] === 'undefined') {
+        delete newQueryParams[key];
+      }
+    });
+
+    router.push({
+      pathname: router.pathname,
+      query: newQueryParams
+    });
+  };
 
   const {
     res: resLabel,
     isLoading: isLoadingLabel,
     isError: isErrorLabel,
   } = useFetcher(`public/label`);
+
+  const filter = `doclanguage=${language.grade_id}&callnumber=${callNumberSearch.grade_id}&subject=${subjectSearch.grade_id}&gmdSearch=${gmdSearch.grade_id}&label=${labelSearch.grade_id}`;
+
   const { res } = useFetcher(
-    `public/book?doclanguage=${language.grade_id}&callnumber=${callNumberSearch.grade_id}&subject=${subjectSearch.grade_id}&gmdSearch=${gmdSearch.grade_id}&label=${labelSearch.grade_id}`
+    `public/book`, page, filter
   );
+  
+  console.log(res);
   const {
     res: resSubject,
     isLoading: isLoadingSubject,
@@ -75,7 +126,6 @@ export default function FilterKatalogBook() {
         return { name: d.name, value: d.id };
       });
       setLabel(pilihan_label);
-
     }
     if (resSubject) {
       const pilihan_subject = resSubject.data.map((d) => {
@@ -104,7 +154,7 @@ export default function FilterKatalogBook() {
 
   useEffect(() => {
     if (res) {
-      const data = res.data.map((gedung) => {
+      const data = res.data.data.map((gedung) => {
         const arr = Object.entries(gedung);
         const filterArr = arr.filter(
           ([key, value]) => key !== "status" && typeof value !== "object"
@@ -124,8 +174,12 @@ export default function FilterKatalogBook() {
       let filteredDatas = data;
       filteredDatas = filteredData.filter((item) => item.opac !== 0);
       setDataTableGedung(filteredDatas);
+      setDataPagination(res.data);
+      if (search && move) {
+        setMove(false);
+        router.push(`${route}?page=1`);
+      }
       setIsLoading(false);
-      location.push("/filterKatalogBook");
     }
   }, [res]);
 
@@ -148,8 +202,9 @@ export default function FilterKatalogBook() {
                 size="w-full"
                 handleValue={(select) => {
                   const grade_id = select.map((d) => d.value);
-                  setLabelSearch({ ...labelSearch, grade_id });
-                  setIsLoading(true)
+                  setLabelSearch({ grade_id });
+                  updateUrl('label', grade_id);
+                  setIsLoading(true);
                 }}
               />
             </div>
@@ -162,8 +217,9 @@ export default function FilterKatalogBook() {
                 size="w-full"
                 handleValue={(select) => {
                   const grade_id = select.map((d) => d.value);
-                  setCallNumberSearch({ ...callNumberSearch, grade_id });
-                  setIsLoading(true)
+                  setCallNumberSearch({ grade_id });
+                  updateUrl('callnumber', grade_id);
+                  setIsLoading(true);
                 }}
               />
             </div>
@@ -176,8 +232,9 @@ export default function FilterKatalogBook() {
                 size="w-full"
                 handleValue={(select) => {
                   const grade_id = select.map((d) => d.value);
-                  setSubjectSearch({ ...callNumberSearch, grade_id });
-                  setIsLoading(true)
+                  setSubjectSearch({ grade_id });
+                  updateUrl('subject', grade_id);
+                  setIsLoading(true);
                 }}
               />
             </div>
@@ -190,8 +247,9 @@ export default function FilterKatalogBook() {
                 size="w-full"
                 handleValue={(select) => {
                   const grade_id = select.map((d) => d.value);
-                  setGMDSearch({ ...gmdSearch, grade_id });
-                  setIsLoading(true)
+                  setGMDSearch({ grade_id });
+                  updateUrl('gmdSearch', grade_id);
+                  setIsLoading(true);
                 }}
               />
             </div>
@@ -204,12 +262,14 @@ export default function FilterKatalogBook() {
                 size="w-full"
                 handleValue={(select) => {
                   const grade_id = select.map((d) => d.value);
-                  setLanguage({ ...language, grade_id });
-                  setIsLoading(true)
+                  setLanguage({ grade_id });
+                  updateUrl('doclanguage', grade_id);
+                  setIsLoading(true);
                 }}
               />
             </div>
           </div>
+
           <div className="w-full h-full min-h-screen border rounded shadow space-y-6 px-4 py-4 xl:px-8 xl:py-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <Label
@@ -263,7 +323,14 @@ export default function FilterKatalogBook() {
             </div>
           </div>
         </div>
+        <div className="xl:container mx-auto px-2 pb-4 xl:px-6 xl:gap-6 flex justify-center align-middle items-center flex-col md:flex-row gap-2">{pagination && <TableBottomNav pagination={pagination} />}</div>
       </Navbar>
     </div>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  const page = ctx.query.page || 1;
+  const baseUrl = `${process.env.API_URL}/api/book`;
+  return { props: { page, baseUrl } };
 }

@@ -55,13 +55,13 @@ export const useMenuProvider = () => {
             title: "Publisher",
             detail: "See Publisher details here!",
           },
-          {
-            id: 6,
-            route: "/master/supplier",
-            name: "Supplier",
-            title: "Supplier",
-            detail: "See Supplier details here!",
-          },
+          // {
+          //   id: 6,
+          //   route: "/master/supplier",
+          //   name: "Supplier",
+          //   title: "Supplier",
+          //   detail: "See Supplier details here!",
+          // },
           {
             id: 7,
             route: "/master/author",
