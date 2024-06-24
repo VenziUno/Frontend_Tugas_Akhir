@@ -125,29 +125,30 @@ const TableBody = ({
       Nov: "11",
       Des: "12",
     };
-  
+
     // Parsing string tanggal dengan mengabaikan hari dalam seminggu
-    const match = borrowingDate.match(/(?:\w+),\s*(\d{1,2})\s*(\w{3})\s*(\d{4})/);
+    const match = borrowingDate.match(
+      /(?:\w+),\s*(\d{1,2})\s*(\w{3})\s*(\d{4})/
+    );
     if (!match) {
-      throw new Error('Format tanggal tidak valid');
+      throw new Error("Format tanggal tidak valid");
     }
-  
+
     const [, day, monthName, year] = match;
     const monthNumber = monthMap[monthName];
-  
+
     if (!monthNumber) {
-      throw new Error('Nama bulan tidak valid');
+      throw new Error("Nama bulan tidak valid");
     }
-  
+
     // Memastikan day memiliki dua digit
-    const dayWithTwoDigits = day.padStart(2, '0');
-  
+    const dayWithTwoDigits = day.padStart(2, "0");
+
     // Menghasilkan tanggal dalam format "DDMMYYYY"
     const formattedDate = `${dayWithTwoDigits}${monthNumber}${year}`;
-  
+
     return formattedDate;
   }
-  
 
   function calculateDueDate(startDate, daysToAdd) {
     // Parsing tanggal "DDMMYYYY" ke Date object
@@ -205,20 +206,19 @@ const TableBody = ({
       const baseUrl =
         location.components[location.pathname].props.pageProps.baseUrl;
       const url = `${baseUrl}/${id}`;
+      const finePerDay = 1000;
+      const fine = Math.min(Math.abs(remaining) * finePerDay, 10000); // Max fine of 10,000 units
       const title = `Kamu telat ${Math.abs(
         remaining
-      )} hari. Denda yang harus dibayarkan sebesar Rp ${
-        Math.abs(remaining) * 1000
-      }.`;
+      )} hari. Denda yang harus dibayarkan sebesar Rp ${fine}.`;
       setMulct({
         show: true,
         url: url,
         data: title,
-        mulct: Math.abs(remaining) * 1000,
+        mulct: fine,
       });
     }
   };
-
   const handleExtension = async (id, borrowingDate, borrowingApporval) => {
     try {
       const formattedDate = parseBorrowingDate(borrowingDate);
@@ -336,7 +336,6 @@ const TableBody = ({
                           );
                         }}
                       >
-
                         <FiCheck size={20} />
                       </Button>
                     )}

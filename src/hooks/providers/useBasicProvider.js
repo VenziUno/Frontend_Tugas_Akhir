@@ -111,7 +111,7 @@ export const useBasicProvider = () => {
           type: "",
           message: "",
         }),
-      4000
+      8000
     );
     return () => clearTimeout(timer);
   };

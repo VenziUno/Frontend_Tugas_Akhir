@@ -8,11 +8,12 @@ import axios from "axios";
 
 export default function CardNotif({ type, title, mulcts }) {
   const { user, basic } = useAppContext();
-  const { setShowLogout, deleteItem, setDeleteItem, mulct , setMulct } = user;
+  const { setShowLogout, deleteItem, setDeleteItem, mulct, setMulct } = user;
   const location = useRouter();
   const path = location.asPath;
-  const query = location.query.page;
-  const {form, setform, notification, setNotification, handleShowNotification } = basic;
+  const query = location.query.page || 1;
+  const { form, setform, notification, setNotification, handleShowNotification } = basic;
+
   function formatDate(date) {
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -22,19 +23,12 @@ export default function CardNotif({ type, title, mulcts }) {
 
   const handleConfirm = async (e) => {
     e.preventDefault();
-    if (deleteItem.data === 1) {
-      location.push(`${location.basePath}?page=${query - 1}`);
-    }
     if (type === "logout") {
       const token = sessionStorage.getItem("token");
       if (token) {
         try {
           const res = await axios.post(
-            `${
-              typeof window === "undefined"
-                ? process.env.API_URL_SSR
-                : process.env.API_URL
-            }/api/logout`,
+            `${typeof window === "undefined" ? process.env.API_URL_SSR : process.env.API_URL}/api/logout`,
             { token: token },
             {
               headers: {
@@ -61,21 +55,37 @@ export default function CardNotif({ type, title, mulcts }) {
             Authorization: `Bearer ${token}`,
           },
         });
-        location.reload();
+
+        const remainingItems = deleteItem.data - 1; // assuming one item is deleted
+        const maxItemsOnCurrentPage = 5; // assuming 5 items per page
+        const newCurrentPage = remainingItems <= (query - 1) * maxItemsOnCurrentPage ? query - 1 : query;
+
+        if (newCurrentPage > 0) {
+          location.push(`${location.pathname}?page=${newCurrentPage}`);
+        } else {
+          location.reload();
+        }
+
+        setDeleteItem({
+          show: false,
+          url: null,
+          data: 0,
+        });
+
         setNotification({
           show: true,
           type: "Success",
           message: res.data.message,
         });
       } catch (error) {
-        location.reload();
         setNotification({
           show: true,
           type: "Danger",
           message: error.message,
         });
+        location.reload();
       }
-    } else if (type === "mulct"){
+    } else if (type === "mulct") {
       try {
         const returned_date = new Date();
         form.returned_date = formatDate(returned_date);
@@ -95,6 +105,10 @@ export default function CardNotif({ type, title, mulcts }) {
           show: true,
           type: "Success",
           message: res.data.message,
+        });
+        setMulct({
+          show: false,
+          url: null,
         });
         location.reload();
       } catch (error) {
@@ -123,6 +137,8 @@ export default function CardNotif({ type, title, mulcts }) {
       });
     }
   };
+
+  if (!deleteItem.show && !mulct.show && !setShowLogout) return null; // Ensure the card is hidden when not needed
 
   return (
     <div className="absolute z-50 flex justify-center align-middle items-center w-full h-screen ">

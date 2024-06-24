@@ -148,7 +148,7 @@ export default function Member({ page }) {
         const formattedDueDate = formatDate(dueDate);
         const formattedDueDateString = `${dueDayName}, ${formattedDueDate}`;
   
-        if (remainingDays <= 3) {
+        if (remainingDays <= 1) {
           let notificationMessage = '';
           if (remainingDays < 0) {
             notificationMessage = `Peminjaman buku "${book_detail_status.book.title}" oleh ${borrowing.member.name} terlambat ${Math.abs(remainingDays)} hari.`;
